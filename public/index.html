@@ -8,18 +8,22 @@
 </head>
 <body>
     <h1>GitHub Activity Feed</h1>
+    <div id="loading">Loading...</div>
     <ul id="feed"></ul>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
         const feed = document.getElementById('feed');
+        const loading = document.getElementById('loading');
 
         socket.on('github activity', (data) => {
+            loading.style.display = 'none';
             feed.innerHTML = '';
             data.forEach(event => {
+                console.log(event);
                 const li = document.createElement('li');
-                li.textContent = `${event.type} at ${event.repo.name}`;
+                li.textContent = `${event.type} at ${event.repo.name} (Created at ${event.created_at}, Commit Message: ${event.payload.commits && event.payload.commits.length > 0 ? event.payload.commits[0].message : 'No commit message'})`;
                 feed.appendChild(li);
             });
         });
