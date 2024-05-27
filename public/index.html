@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Activity Feed</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>GitHub Activity Feed</h1>
+    <ul id="feed"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const feed = document.getElementById('feed');
+
+        socket.on('github activity', (data) => {
+            feed.innerHTML = '';
+            data.forEach(event => {
+                const li = document.createElement('li');
+                li.textContent = `${event.type} at ${event.repo.name}`;
+                feed.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>
